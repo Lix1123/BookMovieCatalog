@@ -1,0 +1,122 @@
+﻿@page
+@model BookMovieCatalog.Areas.Identity.Pages.Account.Manage.IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<!-- Стилизация за по-добър изглед -->
+<style>
+    .form-control {
+        background-color: #2b2b2b !important; /* Тъмен фон */
+        color: #ffffff !important; /* Бял текст */
+        border: 1px solid #555555 !important;
+    }
+
+    .form-floating > label {
+        color: #aaaaaa !important; /* По-светъл текст за label */
+    }
+
+    .form-control:focus {
+        outline: none !important;
+        box-shadow: none !important;
+        border-color: #777777 !important;
+    }
+
+    /* За textarea */
+    textarea.form-control {
+        background-color: #2b2b2b !important;
+        color: #ffffff !important;
+    }
+
+    /* Центриране на бутона и повече разстояние отдолу */
+    .save-btn-container {
+        text-align: center;
+        padding-bottom: 20px;
+    }
+
+    /* По-добър изглед за аватара */
+    .avatar-preview {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+
+        .avatar-preview img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+        }
+</style>
+
+<h3>@ViewData["Title"]</h3>
+<partial name="_StatusMessage" for="StatusMessage" />
+
+<div class="row pb-4">
+    <div class="col-md-6 offset-md-3">
+        <form id="profile-form" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            <!-- Потребителско име (readonly) -->
+            <div class="form-floating mb-3">
+                <input asp-for="Username" class="form-control" disabled />
+                <label asp-for="Username"></label>
+            </div>
+
+            <!-- Телефонен номер -->
+            <div class="form-floating mb-3">
+                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Phone number" />
+                <label asp-for="Input.PhoneNumber"></label>
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <!-- Аватар (URL) -->
+            <div class="form-floating mb-3">
+                <input asp-for="Input.AvatarUrl" class="form-control" placeholder="Avatar URL" />
+                <label asp-for="Input.AvatarUrl"></label>
+                <span asp-validation-for="Input.AvatarUrl" class="text-danger"></span>
+            </div>
+
+            <!-- Преглед на аватара (ако има) -->
+            <div class="avatar-preview">
+                <img src="@(string.IsNullOrEmpty(Model.Input.AvatarUrl) ? Url.Content("~/images/default-avatar.png") : Model.Input.AvatarUrl)"
+                     alt="Avatar" onerror="this.onerror=null; this.src='/images/default-avatar.png';">
+            </div>
+
+            <!-- Полета за име и фамилия -->
+            <div class="form-floating mb-3">
+                <input asp-for="Input.FirstName" class="form-control" placeholder="First Name" />
+                <label asp-for="Input.FirstName"></label>
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.LastName" class="form-control" placeholder="Last Name" />
+                <label asp-for="Input.LastName"></label>
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+
+            <!-- Поле "За мен" -->
+            <div class="mb-3">
+                <label asp-for="Input.AboutMe"></label>
+                <textarea asp-for="Input.AboutMe" class="form-control" rows="4"
+                          placeholder="Write something about yourself..."></textarea>
+                <span asp-validation-for="Input.AboutMe" class="text-danger"></span>
+            </div>
+
+            <!-- Бутон за записване (центриран) -->
+            <div class="save-btn-container">
+                <button type="submit" class="btn btn-primary px-4">
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

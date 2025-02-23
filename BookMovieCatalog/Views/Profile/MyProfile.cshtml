@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Моят профил (Claims)";
+}
+
+<h2 class="text-light">Моят профил (чрез Claims)</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+
+<form method="post">
+    <div class="mb-3">
+        <label for="avatarUrl" class="form-label">Avatar URL</label>
+        <input type="text" id="avatarUrl" name="avatarUrl"
+               class="form-control"
+               value="@ViewBag.AvatarUrl" />
+    </div>
+
+    @if (!string.IsNullOrEmpty((string)ViewBag.AvatarUrl))
+    {
+        <p>
+            <img src="@ViewBag.AvatarUrl" alt="Avatar"
+                 style="width:120px; height:auto;" />
+        </p>
+    }
+
+    <button type="submit" class="btn btn-primary">Запази</button>
+</form>

@@ -1,0 +1,44 @@
+﻿@page
+@model BookMovieCatalog.Areas.Identity.Pages.Account.ProfileModel
+@{
+    ViewData["Title"] = "Моят профил";
+}
+
+<h1>Моят профил</h1>
+
+<div class="card mb-4">
+    <div class="card-header">Информация за профила</div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group mb-3">
+                <label for="Name">Име</label>
+                <input type="text" id="Name" name="Name" class="form-control" value="@Model.Name" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="Email">Имейл</label>
+                <input type="email" id="Email" name="Email" class="form-control" value="@Model.Email" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="AvatarFile">Аватар</label>
+                <input type="file" id="AvatarFile" name="AvatarFile" class="form-control" />
+                @if (!string.IsNullOrEmpty(Model.AvatarPath))
+                {
+                    <img src="@Model.AvatarPath" alt="Avatar" class="img-thumbnail mt-3" style="width: 150px; height: 150px;" />
+                }
+            </div>
+
+            <button type="submit" class="btn btn-primary">Запази промените</button>
+        </form>
+
+        @if (ViewData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success mt-3">@ViewData["SuccessMessage"]</div>
+        }
+        @if (ViewData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger mt-3">@ViewData["ErrorMessage"]</div>
+        }
+    </div>
+</div>

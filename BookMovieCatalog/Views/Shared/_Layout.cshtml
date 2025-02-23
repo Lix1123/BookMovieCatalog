@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BookMovieCatalog</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+          integrity="sha512-xh6MztJdsa8IBR3r7RMOAocS0p0gUI6+5Kd7bQFU3C2qGy4YpNVRDx6N5OXnvm6GivRXNIM5C8KaHBN3Jx1vMA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/BookMovieCatalog.styles.css" asp-append-version="true" />
+
+    <style>
+        /* Основен стил */
+        body {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        /* Навигация */
+        .navbar {
+            background: linear-gradient(45deg, #ff5733, #c70039);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+
+            .navbar-nav .nav-link:hover {
+                color: #fbc531 !important;
+            }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #c70039;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 30px;
+        }
+
+        /* Бутони */
+        .btn-custom {
+            background: linear-gradient(45deg, #ff9f43, #ff6b6b);
+            border: none;
+            transition: all 0.3s ease-in-out;
+            color: white;
+        }
+
+            .btn-custom:hover {
+                background: linear-gradient(45deg, #ff6b6b, #ff9f43);
+                transform: scale(1.1);
+            }
+
+        /* Аватар в навигацията */
+        .avatar-img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 5px;
+            border: 2px solid white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">📚 BookMovieCatalog 🎬</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">🏠 Начало</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Book" asp-action="Index">📖 Книги</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Movie" asp-action="Index">🎥 Филми</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Review" asp-action="Index">📝 Рецензии</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Book" asp-action="TopBooks">🔥 Топ книги</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Movie" asp-action="TopMovies">🌟 Топ филми</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">🔒 Privacy</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if (User?.Identity?.IsAuthenticated == true)
+                        {
+                            var avatarUrl = User.Claims.FirstOrDefault(c => c.Type == "avatar_url")?.Value ?? "~/images/default-avatar.png";
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" data-bs-toggle="dropdown">
+                                    <img src="@avatarUrl" alt="Avatar" class="avatar-img" />
+                                    @User.Identity.Name
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Моят профил</a>
+                                    </li>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" asp-area="" asp-controller="Admin" asp-action="Dashboard">⚙ Админ панел</a>
+                                        </li>
+                                    }
+                                    <li>
+                                        <form asp-area="Identity" asp-page="/Account/Logout" method="post">
+                                            <button type="submit" class="dropdown-item">🚪 Изход</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="btn btn-sm btn-custom text-light px-3 mx-2" asp-area="Identity" asp-page="/Account/Login">🔑 Вход</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-sm btn-custom text-light px-3" asp-area="Identity" asp-page="/Account/Register">🆕 Регистрация</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            &copy; 2025 - BookMovieCatalog |
+            <a class="text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,110 @@
+﻿@model IEnumerable<BookMovieCatalog.Models.Review>
+
+@{
+    var books = ViewBag.Books as List<BookMovieCatalog.Models.Book> ?? new List<BookMovieCatalog.Models.Book>();
+    var movies = ViewBag.Movies as List<BookMovieCatalog.Models.Movie> ?? new List<BookMovieCatalog.Models.Movie>();
+    var avatars = ViewBag.UserAvatars as Dictionary<string, string> ?? new Dictionary<string, string>();
+
+    string GetAvatar(string? userId) => !string.IsNullOrEmpty(userId) && avatars.ContainsKey(userId)
+        ? avatars[userId]
+        : "/images/default-avatar.png";
+}
+
+<h2 class="text-center text-light mb-4">Рецензии</h2>
+
+@if (Model != null && Model.Any())
+{
+    <div class="container">
+        <div class="row">
+            @foreach (var review in Model)
+            {
+                var associatedBook = review.BookId.HasValue ? books.FirstOrDefault(b => b.Id == review.BookId) : null;
+                var associatedMovie = review.MovieId.HasValue ? movies.FirstOrDefault(m => m.Id == review.MovieId) : null;
+                var starCount = Math.Clamp((int)Math.Ceiling(review.Rating / 2.0), 1, 5);
+
+                <div class="col-md-8 offset-md-2 mb-4">
+                    <div class="card bg-dark text-light border-secondary shadow">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="@GetAvatar(review.UserId)"
+                                     width="60" height="60"
+                                     class="rounded-circle border border-light me-3"
+                                     alt="User Avatar"
+                                     onerror="this.onerror=null; this.src='/images/default-avatar.png';" />
+                                <div>
+                                    <h4 class="mb-0">@review.UserName</h4>
+                                    <small class="text-muted">@review.Date.ToString("dd.MM.yyyy HH:mm")</small>
+                                </div>
+                            </div>
+
+                            <hr class="text-secondary" />
+
+                            <div class="text-center">
+                                @if (associatedBook != null)
+                                {
+                                    <img src="@associatedBook.ImageUrl"
+                                         alt="@associatedBook.Title"
+                                         style="max-width: 220px; height: auto;"
+                                         class="border border-light rounded shadow-sm mb-2" />
+                                    <p>
+                                        <strong>Книга:</strong>
+                                        <a asp-controller="Book" asp-action="Details"
+                                           asp-route-id="@associatedBook.Id"
+                                           class="text-info fw-bold">
+                                            @associatedBook.Title
+                                        </a>
+                                    </p>
+                                }
+                                else if (associatedMovie != null)
+                                {
+                                    <img src="@associatedMovie.ImageUrl"
+                                         alt="@associatedMovie.Title"
+                                         style="max-width: 220px; height: auto;"
+                                         class="border border-light rounded shadow-sm mb-2" />
+                                    <p>
+                                        <strong>Филм:</strong>
+                                        <a asp-controller="Movie" asp-action="Details"
+                                           asp-route-id="@associatedMovie.Id"
+                                           class="text-info fw-bold">
+                                            @associatedMovie.Title
+                                        </a>
+                                    </p>
+                                }
+                                else
+                                {
+                                    <img src="~/images/default-placeholder.png"
+                                         alt="No content"
+                                         style="max-width: 220px; height: auto;"
+                                         class="border border-warning rounded shadow-sm mb-2" />
+                                    <p class="text-warning fw-bold">Неизвестно съдържание</p>
+                                }
+                            </div>
+
+                            <p class="mt-3 fs-5">@review.Comment</p>
+
+                            <div class="mb-3">
+                                <span class="text-warning fs-5">
+                                    @for (int i = 1; i <= starCount; i++)
+                                    {
+                                        <i class="fas fa-star"></i>
+                                    }
+                                    @for (int i = starCount + 1; i <= 5; i++)
+                                    {
+                                        <i class="far fa-star"></i>
+                                    }
+                                </span>
+                                <small class="text-light ms-2">
+                                    (Оценка: @review.Rating / 10)
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <p class="text-center text-light mt-4">Все още няма рецензии.</p>
+}

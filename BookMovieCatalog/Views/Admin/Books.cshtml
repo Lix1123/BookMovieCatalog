@@ -1,0 +1,31 @@
+﻿@model IEnumerable<BookMovieCatalog.Models.Book>
+
+<h2>Списък с книги</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Снимка</th>
+            <th>Заглавие</th>
+            <th>Автор</th>
+            <th>Жанр</th>
+            <th>Година</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var book in Model)
+        {
+            <tr>
+                <td><img src="@book.ImageUrl" alt="@book.Title" style="width: 100px;" /></td>
+                <td>@book.Title</td>
+                <td>@book.Author</td>
+                <td>@book.Genre</td>
+                <td>@book.YearPublished.ToString("yyyy")</td>
+                <td>
+                    <a asp-action="EditBook" asp-route-id="@book.Id" class="btn btn-primary">Редактиране</a>
+                    <a asp-action="DeleteBook" asp-route-id="@book.Id" class="btn btn-danger">Изтриване</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

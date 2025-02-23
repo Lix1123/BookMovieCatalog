@@ -1,0 +1,114 @@
+﻿@model BookMovieCatalog.Models.Book
+
+@{
+    ViewData["Title"] = Model.Title;
+
+    // Помощна функция за ImageUrl (с fallback, ако е null/празно)
+    string ResolveImageUrl(string? url)
+    {
+        if (string.IsNullOrEmpty(url))
+            return Url.Content("~/images/default-placeholder.png"); // ако няма снимка
+        if (url.StartsWith("http", System.StringComparison.OrdinalIgnoreCase))
+            return url; // външен линк
+        if (url.StartsWith("/"))
+            return Url.Content("~" + url);
+        return Url.Content($"~/images/{url}");
+    }
+
+    var cover = ResolveImageUrl(Model.ImageUrl);
+    // Среден рейтинг и брой гласове
+    double average = Model.AverageRating;
+    int totalVotes = Model.TotalVotes;
+}
+
+<div class="container">
+    <!-- Заглавие -->
+    <div class="text-center mb-4">
+        <h1 class="mb-0">@Model.Title</h1>
+    </div>
+
+    <!-- детайлите за книгата -->
+    <div class="card bg-dark text-light border-light shadow-lg mb-4">
+        <div class="row g-0">
+            <!-- корица на книгата -->
+            <div class="col-md-4 text-center">
+                <img src="@cover"
+                     alt="@Model.Title"
+                     class="img-fluid rounded-start border border-secondary"
+                     style="max-height: 500px; object-fit: cover;" />
+            </div>
+
+            <!-- информация за книгата -->
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h4 class="card-title">@Model.Title</h4>
+                    <p class="card-text">
+                        <strong>Автор:</strong> @Model.Author<br />
+                        <strong>Жанр:</strong> @Model.Genre<br />
+                        <strong>Година на издаване:</strong> @Model.YearPublished.ToString("dd.MM.yyyy")<br />
+                        <strong>Описание:</strong> @Model.Description
+                    </p>
+
+                    <!-- Среден рейтинг и брой гласове -->
+                    <p class="mt-3">
+                        <strong>Среден рейтинг:</strong> @average.ToString("0.0") / 5
+                        (<small>Гласове: @totalVotes</small>)
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Рецензии за книгата -->
+    <h3 class="text-light mt-4">Рецензии</h3>
+
+    @if (Model.Reviews != null && Model.Reviews.Any())
+    {
+        <div class="list-group mb-3">
+            @foreach (var review in Model.Reviews.OrderByDescending(r => r.Date))
+            {
+                <div class="list-group-item list-group-item-dark mb-2 border border-secondary">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                           
+                            <strong>@review.Rating звезди</strong>: @review.Comment
+                            <br />
+                            <small class="text-muted">
+                                Публикувано на: @review.Date.ToString("dd.MM.yyyy HH:mm")
+                            </small>
+                        </div>
+
+                        <!-- Ако текущият потребител е авторът или Admin, бутони за редактиране/изтриване -->
+                        @if (User?.Identity?.IsAuthenticated == true &&
+                       (User.IsInRole("Admin") || User.Identity?.Name == review.UserName))
+                        {
+                            <div>
+                                <a asp-action="EditReview"
+                                   asp-route-id="@review.Id"
+                                   class="btn btn-sm btn-warning me-2">
+                                    <i class="fas fa-edit"></i> Редактиране
+                                </a>
+                                <a asp-action="DeleteReview"
+                                   asp-route-id="@review.Id"
+                                   class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i> Изтриване
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-light">Все още няма рецензии за тази книга.</p>
+    }
+
+    <!-- Бутон за добавяне на рецензия -->
+    <div class="mt-3">
+        <a asp-action="CreateForBook" asp-route-bookId="@Model.Id" class="btn btn-success">
+            <i class="fas fa-pen"></i> Добави рецензия
+        </a>
+    </div>
+</div>

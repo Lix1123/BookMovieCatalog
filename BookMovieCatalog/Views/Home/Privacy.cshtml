@@ -1,0 +1,130 @@
+﻿@{
+    ViewData["Title"] = "Политика за поверителност";
+}
+
+<!-- изглед -->
+<style>
+    .privacy-container {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        background: #1a1a1a;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
+    }
+
+    .privacy-title {
+        color: #ffcc00;
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+
+    .accordion-button {
+        background-color: #222;
+        color: #ffcc00;
+        border: none;
+    }
+
+        .accordion-button:focus {
+            box-shadow: none;
+        }
+
+    .accordion-body {
+        background: #2b2b2b;
+        color: white;
+    }
+
+    .faq-title {
+        color: #ffcc00;
+        text-align: center;
+        margin-top: 40px;
+    }
+</style>
+
+<div class="privacy-container">
+    <h2 class="privacy-title">Политика за поверителност</h2>
+    <p>
+        Добре дошли в **BookMovieCatalog**! Вашата поверителност е важна за нас. Тази страница обяснява как събираме,
+        използваме и защитаваме личните ви данни, когато използвате нашата платформа.
+    </p>
+
+    <h4>🔹 Каква информация събираме?</h4>
+    <ul>
+        <li>Вашето име и имейл при създаване на акаунт.</li>
+        <li>Рецензиите и оценките, които публикувате.</li>
+        <li>Данни за активността, за да подобрим потребителското изживяване.</li>
+    </ul>
+
+    <h4>🔹 Как използваме вашата информация?</h4>
+    <ul>
+        <li>За персонализиране на препоръки за книги и филми.</li>
+        <li>За изпращане на важни съобщения, свързани с вашия акаунт.</li>
+        <li>За повишаване на сигурността и предотвратяване на измами.</li>
+    </ul>
+
+    <h4>🔹 Споделяме ли вашите данни?</h4>
+    <p>
+        **Никога** не продаваме личните ви данни. Споделяме информация само с доверени услуги
+        за удостоверяване и анализи.
+    </p>
+
+    <h4 class="faq-title">❓ Често задавани въпроси (FAQ)</h4>
+
+    <div class="accordion" id="privacyAccordion">
+        <!-- FAQ 1 -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                    🔐 Как се защитава моята информация?
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#privacyAccordion">
+                <div class="accordion-body">
+                    Ние използваме **шифроване** и **сигурно удостоверяване**, за да защитим вашите данни.
+                    Всички пароли се съхраняват сигурно, а нашите системи се актуализират редовно за подобряване на сигурността.
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                    📅 Колко време се съхраняват моите данни?
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#privacyAccordion">
+                <div class="accordion-body">
+                    Вашите данни се съхраняват, докато акаунтът ви е активен. Можете да поискате изтриване на данните си по всяко време, като се свържете с нас.
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                    ❌ Мога ли да изтрия акаунта си?
+                </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#privacyAccordion">
+                <div class="accordion-body">
+                    Да! Можете да изтриете акаунта си от настройките на профила или да се свържете с нашия екип за поддръжка за помощ.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p class="text-center mt-4">
+        Ако имате допълнителни въпроси, можете да се <a href="/Home/Contact">свържете с нас</a>.
+    </p>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("Privacy Policy page loaded.");
+        });
+    </script>
+}

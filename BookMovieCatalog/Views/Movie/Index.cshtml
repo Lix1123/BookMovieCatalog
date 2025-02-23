@@ -1,0 +1,65 @@
+﻿@model IEnumerable<BookMovieCatalog.Models.Movie>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<h2>🎬 Списък с филми</h2>
+
+<!--  Търсачка за филми -->
+<form asp-controller="Movie" asp-action="Index" method="get" class="mb-3">
+    <div class="input-group">
+        <input type="text" name="search" class="form-control" placeholder="Търси филм..." value="@ViewBag.SearchQuery" />
+        <button type="submit" class="btn btn-primary">Търси</button>
+    </div>
+</form>
+
+<table class="table table-dark table-striped">
+    <thead>
+        <tr>
+            <th>Снимка</th>
+            <th>Заглавие</th>
+            <th>Режисьор</th>
+            <th>Жанр</th>
+            <th>Година</th>
+            <th>Трейлър</th>
+            <th>Рецензии</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var movie in Model)
+        {
+            <tr>
+                <td>
+                    <img src="@movie.ImageUrl" alt="@movie.Title" style="width: 100px; height: auto;" class="rounded" />
+                </td>
+                <td>@movie.Title</td>
+                <td>@movie.Director</td>
+                <td>@movie.Genre</td>
+                <td>@movie.YearReleased.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <a href="@movie.TrailerUrl" target="_blank" class="btn btn-info">Гледай трейлър</a>
+                </td>
+                <td>
+                    <a asp-controller="Review" asp-action="CreateForMovie" asp-route-movieId="@movie.Id" class="btn btn-secondary">
+                        Добавяне на рецензия
+                    </a>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@movie.Id" class="btn btn-light">🔍 Детайли</a>
+
+                    @if (ViewBag.IsAdmin)
+                    {
+                        <a asp-action="Edit" asp-route-id="@movie.Id" class="btn btn-warning">✏ Редактиране</a>
+                        <a asp-action="Delete" asp-route-id="@movie.Id" class="btn btn-danger">🗑 Изтриване</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (ViewBag.IsAdmin)
+{
+    <a asp-action="Create" class="btn btn-success">➕ Добавяне на филм</a>
+}

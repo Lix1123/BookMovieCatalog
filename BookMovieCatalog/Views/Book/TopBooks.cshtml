@@ -1,0 +1,21 @@
+﻿@model List<BookMovieCatalog.Models.Book>
+
+<h2 class="text-center text-light">Топ 10 Книги</h2>
+
+<div class="container">
+    <div class="row">
+        @foreach (var book in Model)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card bg-dark text-light border-light shadow-lg p-3 rounded">
+                    <img src="@book.ImageUrl" class="card-img-top" alt="@book.Title">
+                    <div class="card-body">
+                        <h5 class="card-title">@book.Title</h5>
+                        <p class="text-warning">⭐ @book.AverageRating / 10</p>
+                        <a asp-action="Details" asp-route-id="@book.Id" class="btn btn-primary">Детайли</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
